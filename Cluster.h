@@ -8,12 +8,13 @@
 
 #include "Constants.h"
 #include "Particle.h"
+#include "Darksusy.h"
 
 class Cluster{  
 
 	public:
 
-	std::string name;
+	static std::string name;
 
 	//Cluster Parameters
 	static double z ;					//redshift
@@ -42,24 +43,24 @@ class Cluster{
 	static double bcoul;
 	
 	// Diffusion Parameters
-	int SD;						//switch to turn on diffusion, 0 -> NSD, 1-> SD
+	static int SD;						//switch to turn on diffusion, 0 -> NSD, 1-> SD
 	static double gamma;				// D(E) ~ E^gamma
 	static double db;					// minimum scale of uniformity for mag field, from Colafrancesco. 
 	static double D0;					//in cm^2/s
 
 	// v lookup table parameters
-	int vsize;
-	double vscale;
-	std::vector<double> vlookup;
+	static int vsize;
+	static double vscale;
+	static std::vector<double> vlookup;
 
 	// Greens lookupt table parameters 
-	int imNum;
-	int n_r;
-	int n_rootdv;
-	int rootdv_max;
-	std::vector< std::vector<double> > GLUT;
+	static int imNum;
+	static int n_r;
+	static int n_rootdv;
+	static int rootdv_max;
+	static std::vector< std::vector<double> > GLUT;
 
-	Particle p;
+	static Particle p;
 
 
 	Cluster() ;
@@ -67,38 +68,47 @@ class Cluster{
 	static double dist();
 	static double rconst(double rcm);
 
-	double bfield_model (double r) ;
+	static double bfield_model (double r) ;
 
 	static double DM_profile(double r);
 
-	double bloss(double E , double r);
+	static double bloss(double E , double r);
 	static double bloss(double E );
 
 	static double D(double E);
 	static double dv(double E , void * params);
-	double v( double E );
-	double root_dv(double Ep,  double vE);
+	static double v( double E );
+	static double root_dv(double Ep,  double vE);
 	static double dgreens_term(double rp, void * params );
-	double greens_term(double ri , double r, double root_dv, double rh);
-	double greens (double r, double root_dv);
-	void   create_vLUT();
-	void   createGLUT();
-	
+	static double greens_term(double ri , double r, double root_dv, double rh);
+	static double greens (double r, double root_dv);
+	static void   create_vLUT();
+	static void   createGLUT();
+
+	static double ddiffusion(double Ep, void * params);
+	static double diffusion( double E, double r);
+	static double elec_spect(double E, double r );
+
 	static double G(double eps, double E_gamma, double boost);
 	static double IC_cross_Section( double eps, double E_gamma, double E);
 	static double CMB_bbSpectrum(double eps);
 	static double dpIC(double eps, void * params );
 	static double pIC(double nu, double E);
 
+	static double fff(double x);
+	static double dpsyn(double theta, void * params );
+	static double psyn( double E, double r, double nu);
+
 	static double djIC(double E , void * params);
- double jIC(double nu, double r);
+ 	static double jIC(double nu, double r);
 	static double djsyn(double E , void * params);
- double jsyn(double r);
+ 	static double jsyn(double nu, double r);
 
 	static double dsIC( double r, void * params );
-	double sIC( double nu);
+	static double sIC( double nu);
 	static double dssyn( double r, void * params );
-	double ssyn();
+	static double ssyn(double nu);
+	static double ssyn();
 
 };
 

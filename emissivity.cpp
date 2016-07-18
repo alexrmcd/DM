@@ -56,15 +56,18 @@ double Cluster::jIC(double nu, double r){ 				// int over E
 
 double Cluster::djsyn(double E , void * params){
 
-	double r = *(double *)params;
+	std::vector<double> jsynParams = *(std::vector<double> *)params;
+	double nu = jsynParams[0];
+	double r = jsynParams[1];
 
-	double djsyn = 2* psyn(E, r)* elec_spect(E , r);
-
+	double djsyn = 2* psyn(E, r, nu)* elec_spect(E , r);
+//	if (djsyn ==0)
+//		std::cout << "psyn = " <<psyn(E, r, nu)<<", elec = "<<  elec_spect(E , r) << std::endl;
 	return djsyn;
 }
 
 
-double Cluster::jsyn(double r){ 				// int over E
+double Cluster::jsyn(double nu, double r){ 				// int over E
 
 	///////////
 	std::clock_t start;
@@ -76,10 +79,14 @@ double Cluster::jsyn(double r){ 				// int over E
 		= gsl_integration_workspace_alloc (1000);
 
 	double result, error;
+	std::vector<double> jsynParams (2);
+
+	jsynParams[0] = nu;
+	jsynParams[1] = r;
 
 	gsl_function F;
 	F.function = &djsyn;
-	F.params = &r;
+	F.params = &jsynParams;
 
 	gsl_integration_qags (&F, me, p.mx, 0, 1e-3, 1000,
 	                    w, &result, &error); 
