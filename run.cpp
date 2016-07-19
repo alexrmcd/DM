@@ -103,14 +103,20 @@ void runSED(double mx){
 	std::ofstream file(filename.c_str());
 
 	for (int i = 0 ; i < n_nu + 1; ++i  ){
-
+		//total time timer start
+		std::clock_t iter_start;
+		double iter_duration;
+		iter_start = std::clock();
+		///////before algorithm
 		double nu_min = 1e12;
 		double nu_max = 1e23;
 	
 		double nu = nu_min * ( exp(    (log(nu_max) - log(nu_min))/ n_nu * i));
 		double data = Gev2erg*Cluster::sIC( nu )*nu ;
 		file << log10(nu) << "\t" << data <<std::endl;
-		std::cout << i<< "/" << n_nu << " " << log10(nu) << "\t" << data << std::endl;
+
+		iter_duration = (std::clock()  -  iter_start)/(double) CLOCKS_PER_SEC;
+		std::cout << i<< "/" << n_nu << " " << log10(nu) << "\t" << data << ", duration: " << iter_duration << std::endl;
 
 	};
 	

@@ -30,7 +30,7 @@ double Cluster::ddiffusion(double Ep, void * params){
 	double ddiffusion;
 
 
-	if(SD == 1){
+	if(SD == 1 ){
 		double Ep_scaled = (int)(Ep/vscale) ;
 		double rootdv = sqrt( std::abs(vE - vlookup[Ep_scaled]) ); 
 
@@ -61,7 +61,7 @@ double Cluster::diffusion( double E, double r){			// int over Ep
 	double E_scaled = (int)(E/vscale);
 
 	double vE = vlookup[E_scaled];
-	
+
 	gsl_integration_workspace * w 
 		= gsl_integration_workspace_alloc (1000);
 

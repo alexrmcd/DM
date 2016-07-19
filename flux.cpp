@@ -36,7 +36,7 @@ double Cluster::sIC( double nu){
 	F.function = &dsIC;
 	F.params = &nu;
 
-	gsl_integration_qags (&F, 1e-16, r, 0, 1e-3, 1000,
+	gsl_integration_qags (&F, 1e-16, r, 0, 1e-2, 1000,
 	                w, &result, &error); 
 
 	result *= p.sv/(8* pi*pow( p.mx , 2.0 ));
@@ -48,7 +48,7 @@ double Cluster::sIC( double nu){
 
 double Cluster::dssyn( double r, void * params ){
 	double nu = *(double *)params;
-	
+
 	double dist_z = dist() / (1+z);
 
 	double ssynIntegrand = 4 *pi /pow(dist_z , 2) *pow(r,2)  *  pow(DM_profile(r) , 2)*jsyn(nu, r);	
@@ -71,7 +71,7 @@ double Cluster::ssyn(){				// int over r
 	F.function = &dssyn;
 	F.params = &nu;
 
-	gsl_integration_qags (&F, 1e-16 ,  r, 0, 1e-3, 1000,
+	gsl_integration_qags (&F, 1e-16 ,  r, 0, 1e-2, 1000,
 	                w, &result, &error); 
 	
 	result *= p.sv/(8* pi*pow( p.mx , 2.0 ));
@@ -95,7 +95,7 @@ double Cluster::ssyn(double nu){				// int over r
 	F.function = &dssyn;
 	F.params = &nu;
 
-	gsl_integration_qags (&F, 1e-16 ,  r, 0, 1e-3, 1000,
+	gsl_integration_qags (&F, 1e-16 ,  r, 0, 1e-2, 1000,
 	                w, &result, &error); 
 	
 	result *= p.sv/(8* pi*pow( p.mx , 2.0 ));

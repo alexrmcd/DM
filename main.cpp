@@ -3,10 +3,10 @@
 #include "Run.h"
 main(){
 	dsinit_();
-//	Cluster::createGLUT();
-	Cluster::SD = 0;
-	runExCurve(25, 0.64);
-	runSED(40);
+	Cluster::createGLUT();
+	//Cluster::SD = 0;
+	//runExCurve(25, 0.64);
+	//runSED(40);
 	runFlux(40);
 }
 
@@ -15,7 +15,8 @@ main(){
 */
 
 /*
- need to do diffusion, so incorporate darksusy, also get elec_spect. issue in emissivity with misusing p.mx?? 
- don't get it, hopefully will fix itself later. can restructure a bit tomorrow and keep more or less same organization as in dark_matter, 
- just with everything through ssyn, sic as Cluster member functions. 
+why are runSED() and runFlux() so much slower
+	slows even more at 48/50 ( runSED() )
+need to make bmu ave of bfield
+write funcs, runGreens_rdv() runGreens_r()
  */

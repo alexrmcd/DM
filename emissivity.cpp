@@ -61,8 +61,8 @@ double Cluster::djsyn(double E , void * params){
 	double r = jsynParams[1];
 
 	double djsyn = 2* psyn(E, r, nu)* elec_spect(E , r);
-//	if (djsyn ==0)
-//		std::cout << "psyn = " <<psyn(E, r, nu)<<", elec = "<<  elec_spect(E , r) << std::endl;
+	//if (r/kpc2cm < 1)
+	//	std::cout << "psyn = " <<psyn(E, r, nu)<<", elec = "<<  elec_spect(E , r) << std::endl;
 	return djsyn;
 }
 
@@ -88,7 +88,7 @@ double Cluster::jsyn(double nu, double r){ 				// int over E
 	F.function = &djsyn;
 	F.params = &jsynParams;
 
-	gsl_integration_qags (&F, me, p.mx, 0, 1e-3, 1000,
+	gsl_integration_qags (&F, me, p.mx, 0, 1e-2, 1000,
 	                    w, &result, &error); 
 
 	gsl_integration_workspace_free (w);
