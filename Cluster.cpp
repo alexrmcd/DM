@@ -8,7 +8,7 @@ double Cluster::rh = 1000.0;
 double Cluster::rcore = 291.0;
 
 double Cluster::B0 = 5.0;
-double Cluster::Bmu = 2.0;
+double Cluster::Bavg = Cluster::Bmu();
 double Cluster::beta = 0.75;
 double Cluster::eta = 0.5;
 
@@ -25,6 +25,7 @@ double Cluster::bbrem = 1.51;
 double Cluster::bcoul = 6.13;
 
 int    Cluster::SD = 1;
+int    Cluster::DD = 1;
 double Cluster::gamma = 0.3;
 double Cluster::db = 20;
 double Cluster::D0 = 3e28;	
@@ -50,12 +51,44 @@ Cluster::Cluster()
 
 double Cluster::bfield_model (double r) {
 
-	double rc = Cluster::rcore * kpc2cm;
+	double rc = rcore * kpc2cm;
 
 	double B_field = B0 * pow(( 1 + r*r/(rc*rc)),(-1.5*beta*eta));		// Storm et al 2013 
 
 	return B_field;
 
+}
+
+double Cluster::bfield_model (double r, void * params) {
+
+	double rc = rcore * kpc2cm;
+
+	double B_field = B0 * pow(( 1 + r*r/(rc*rc)),(-1.5*beta*eta));		// Storm et al 2013 
+
+	return B_field;
+
+}
+
+double Cluster::Bmu(){
+	
+	double Rh = rh*kpc2cm;
+
+	gsl_integration_workspace * w 
+	= gsl_integration_workspace_alloc (1000);
+
+	double result, error;
+
+	gsl_function F;
+	F.function = &bfield_model;
+
+	gsl_integration_qags (&F, 1e-16, Rh, 0, 1e-8, 1000, 
+	                w, &result, &error); 
+
+	gsl_integration_workspace_free (w);
+
+	result *= 1.0/(Rh);
+	
+	return result;
 }
 
 double Cluster::bloss(double E , double r){
@@ -73,7 +106,7 @@ double Cluster::bloss(double E , double r){
 
 double Cluster::bloss(double E ){ 												//overload so that we can just have bloss(E), could also have same as b(E, r) but set r=0 ??  kinda sloppy
 
-	double bloss = bsynch*pow(Bmu, 2.0)*E*E 								//bsyn bfield_model(r)
+	double bloss = bsynch*pow(Bavg, 2.0)*E*E 								//bsyn bfield_model(r)
 					+ bIC /** pow(1 + z, 4 )*/*E*E  					//bIC
 					+ bbrem*nele*(0.36 + log(E/me/nele) )						//brem , in Emma's code  has + 1.51*n*(0.36 + log(E/me) )*E
 					+ bcoul*nele*( 1 + log(E/me/nele)/75); 					//bcoul

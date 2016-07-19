@@ -7,6 +7,7 @@
 #include "Run.h"
 
 std::string channel(){
+
 	std::string channel;
 
 	if(Cluster::p.ch == 13){
@@ -168,3 +169,49 @@ void runFlux(double mx){
 	std::cout << "Total time:  " << duration <<std::endl;
 }
 
+void runGreens_rdv(double r){
+	double root_dv = sqrt(Cluster::v(me));
+	int n_rdv = 1000;
+	double rk = r*kpc2cm;
+	double h = root_dv/n_rdv;
+
+	std::ostringstream makefilename;
+	makefilename << Cluster::name<<"runGreens_rdv_" << r << "kpc" <<".txt" ;
+	std::string filename = makefilename.str();
+	std::ofstream file(filename.c_str());
+
+	for (int ix = 1 ; ix < n_rdv ; ++ix  ){
+
+		double data = Cluster::greens(rk, h*ix );
+
+		if(ix % 10000 == 0)
+			std::cout << ix/10000 << "/" << n_rdv /10000<< std::endl;;		
+		file << h*ix/mpc2cm*1000 << "\t" <<  data <<std::endl;
+		//std::cout << h*ix/mpc2cm*1000 << "\t" << data << std::endl;
+
+	};
+	
+};
+
+void runGreens_r(double rdv){
+
+	int n_rg = 1000;
+	double rdvk = rdv*kpc2cm;
+	double h = Cluster::rh*kpc2cm/n_rg;
+
+	std::ostringstream makefilename;
+	makefilename << Cluster::name <<"runGreens_r_" << rdv << "kpc" <<".txt" ;
+	std::string filename = makefilename.str();
+	std::ofstream file(filename.c_str());
+
+	for (int ix = 1 ; ix < n_rg ; ++ix  ){
+
+		double data = Cluster::greens(h*ix, rdvk );
+
+		if(ix % 10000 == 0)
+			std::cout << ix/10000 << "/" << n_rg /10000<< std::endl;;		
+		file << h*ix/mpc2cm*1000 << "\t" <<  data <<std::endl;
+		//std::cout << h*ix/mpc2cm*1000 << "\t" << data << std::endl;
+
+	};
+};

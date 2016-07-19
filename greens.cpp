@@ -7,8 +7,13 @@
 #include "Cluster.h"
 
 double Cluster::D(double E){
-
-	double D = D0 *pow( db , 2.0/3.0 )* pow(E, gamma)/pow(Bmu, 1.0/3.0);
+	
+	double D;
+	
+	if(DD == 0)
+		D = D0 * pow(E, gamma);
+	else if (DD == 1)
+		D = D0 *pow( db , 2.0/3.0 )* pow(E, gamma)/pow(Bavg, 1.0/3.0);
 
 	return D;
 }
@@ -94,7 +99,7 @@ double Cluster::greens_term(double ri , double r, double root_dv, double Rh){
 double Cluster::greens (double r, double root_dv) {  //called by ddsyn
 
 	double Rh = rh * kpc2cm ;
-	int imNum = 7; //number of image charges = 2*imNum + 1
+	//int imNum = 7; //number of image charges = 2*imNum + 1
 	double Gsum = 0 ;
 	for (int i = - imNum; i < imNum + 1; ++i ){
 
@@ -110,7 +115,6 @@ double Cluster::greens (double r, double root_dv) {  //called by ddsyn
 
 	double Greens = pow(4*pi , -1.0/2.0)*Gsum ;
 
-		//std::cout << "rdv " << root_dv/kpc2cm << std::endl;
 	return Greens;
 
 }
@@ -171,7 +175,7 @@ void Cluster::createGLUT(){
 
 		}
 
-		int a = (int)(  (kpc2cm*15)/rootdv_scale  );
+		int a = (int)(  (kpc2cm*0.5)/rootdv_scale  );
 		std::cout << i << "/" << n_r - 1 << " " << GLUT[i][a] << std::endl;
 	};
 	////////after algorithm

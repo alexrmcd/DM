@@ -23,7 +23,7 @@ class Cluster{
 
 	//Bfield parameters
 	static double B0 ; 				//microGauss
-	static double Bmu;
+	static double Bavg;
 	static double beta;
 	static double eta;
 
@@ -44,6 +44,7 @@ class Cluster{
 	
 	// Diffusion Parameters
 	static int SD;						//switch to turn on diffusion, 0 -> NSD, 1-> SD
+	static int DD;						//switch for D(E). 0-> D = D0 * E^gamma, 1 -> Colafrancesco D(E) 
 	static double gamma;				// D(E) ~ E^gamma
 	static double db;					// minimum scale of uniformity for mag field, from Colafrancesco. 
 	static double D0;					//in cm^2/s
@@ -69,11 +70,13 @@ class Cluster{
 	static double rconst(double rcm);
 
 	static double bfield_model (double r) ;
-
-	static double DM_profile(double r);
+	static double bfield_model (double r, void * params) ;
+	static double Bmu();
 
 	static double bloss(double E , double r);
 	static double bloss(double E );
+
+	static double DM_profile(double r);
 
 	static double D(double E);
 	static double dv(double E , void * params);
